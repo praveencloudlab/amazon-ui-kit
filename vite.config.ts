@@ -9,10 +9,10 @@ export default defineConfig({
       entry: 'src/index.ts',
       name: 'AmazonUIKit',
       fileName: 'amazon-ui-kit',
-      formats: ['es']
+      formats: ['es'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom']
-    }
-  }
+      external: ['react', 'react-dom'],
+    },
+  },
 })

@@ -1,63 +1,88 @@
-import Link from "next/link"
-import StarRating from "./StarRating"
+import React from 'react'
 
-export default function ProductCard({ product }: any) {
+export type ProductCardProps = {
+  id?: number | string
+  title: string
+  price: number
+  image: string
+  rating?: number
+  description?: string
+  href?: string
+  onAddToCart?: () => void
+}
 
-  const totalRatings = Math.floor(product.rating * 200) // generate total ratings dynamically
-
-  return (
-    <div className="border rounded-lg hover:shadow-lg transition w-full flex p-4 bg-white">
-
-      {/* IMAGE LEFT */}
-      <Link href={`/product/${product.id}`} className="w-[200px] flex-shrink-0">
+export default function ProductCard({
+  title,
+  price,
+  image,
+  rating = 0,
+  description,
+  href,
+  onAddToCart,
+}: ProductCardProps) {
+  const content = (
+    <>
+      <div className="flex-shrink-0">
         <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="w-full h-[180px] object-cover rounded"
+          src={image}
+          alt={title}
+          className="h-44 w-44 object-contain"
         />
-      </Link>
-
-      {/* DETAILS RIGHT */}
-      <div className="flex flex-col justify-between flex-1 ml-6">
-
-        {/* Product info */}
-        <div>
-          <Link href={`/product/${product.id}`}>
-            <h2 className="text-lg font-semibold hover:text-blue-600 line-clamp-2">
-              {product.title}
-            </h2>
-          </Link>
-
-          <p className="text-sm text-gray-500 mt-1">Brand: {product.brand}</p>
-
-          {/* Rating: value before stars, stars, total ratings after stars */}
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-sm font-medium">{product.rating.toFixed(1)}</span>
-            <StarRating rating={product.rating} size={16} />
-            <span className="text-sm text-gray-500">({totalRatings.toLocaleString()})</span>
-          </div>
-
-          <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-            {product.description}
-          </p>
-        </div>
-
-        {/* Price & Buttons */}
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-2xl font-bold">${product.price}</p>
-
-          <div className="flex gap-3">
-            <button className="bg-yellow-400 px-4 py-2 rounded hover:bg-yellow-500">
-              Add to Basket
-            </button>
-            <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
-              Buy Now
-            </button>
-          </div>
-        </div>
-
       </div>
 
+      <div className="min-w-0 flex-1">
+        <h3 className="line-clamp-2 text-lg font-medium text-blue-700 hover:underline">
+          {title}
+        </h3>
+
+        <div className="mt-2 flex items-center gap-2 text-sm text-gray-700">
+          <span>{rating.toFixed(1)}</span>
+          <span>★</span>
+        </div>
+
+        {description && (
+          <p className="mt-2 line-clamp-3 text-sm text-gray-600">
+            {description}
+          </p>
+        )}
+
+        <p className="mt-3 text-2xl font-semibold text-gray-900">
+          £{price.toFixed(2)}
+        </p>
+      </div>
+    </>
+  )
+
+  return (
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <div className="flex gap-4">
+        {href ? (
+          <a href={href} className="flex flex-1 gap-4 no-underline">
+            {content}
+          </a>
+        ) : (
+          <div className="flex flex-1 gap-4">{content}</div>
+        )}
+
+        <div className="flex w-44 flex-col items-start justify-start gap-3 rounded-2xl border border-gray-200 p-4">
+          <p className="text-sm text-green-700">In stock</p>
+
+          <button
+            type="button"
+            onClick={onAddToCart}
+            className="inline-flex w-auto items-center justify-center rounded-full bg-yellow-400 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300"
+          >
+            Add to Basket
+          </button>
+
+          <button
+            type="button"
+            className="inline-flex w-auto items-center justify-center rounded-full bg-orange-400 px-4 py-2 text-sm font-medium text-black hover:bg-orange-300"
+          >
+            Buy Now
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
